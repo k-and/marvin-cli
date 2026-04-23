@@ -20,7 +20,7 @@ export default async function get(params: Params, cmdOpt: Options) {
   if (params.length === 1) {
     try {
       const docId = params[0];
-      const res = await GET(`/api/doc?id=${docId}`, { "Content-Type": "text/plain" });
+      const res = await GET(`/api/doc?id=${encodeURIComponent(String(docId))}`, { });
       await printResult(res);
       Deno.exit(0);
     } catch (err) {
