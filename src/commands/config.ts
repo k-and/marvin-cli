@@ -84,9 +84,13 @@ export default async function config(params: Params, cmdOpt: Options) {
     Deno.exit(1);
   }
 
-  if ((key === "port" || key === "publicPort") && typeof val !== "number") {
-    console.error(`Invalid port "${val}" (expected a number). Use "marvin config -h" for help.`);
-    Deno.exit(1);
+  if (key === "port" || key === "publicPort") {
+    const numVal = parseInt(String(val), 10);
+    if (isNaN(numVal) || numVal < 1 || numVal > 65535) {
+      console.error(`Invalid port "${val}" (expected a number 1-65535). Use "marvin config -h" for help.`);
+      Deno.exit(1);
+    }
+    val = numVal;
   }
 
   if (key === "target" && val !== "desktop" && val !== "public" && val !== "default") {
