@@ -62,7 +62,6 @@ if (existsSync(storagePath)) {
     console.error("Failed to read/parse storage:", err instanceof Error ? err.message : String(err));
   }
 } else {
-  console.log("Creating cache");
   cache = { };
   Deno.writeTextFileSync(storagePath, "{}");
 }
