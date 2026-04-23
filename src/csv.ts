@@ -20,7 +20,7 @@ function getDate(d: string) {
   return d || "";
 }
 
-export function toCSV(t: any): string {
+export function toCSV(t: Task): string {
   return [
     t._id,
     t.title,
