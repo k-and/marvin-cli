@@ -141,6 +141,20 @@ export default async function api(params: Params, cmdOpt: Options) {
 
     Deno.exit(0);
   }
+
+  const name = params[0].toString();
+  if (name in endpoints) {
+    const endpoint = endpoints[name];
+    const target = endpoint.servedBy === "desktop" ? " (Desktop API only)" : endpoint.servedBy === "public" ? " (Public API only)" : "";
+    console.log(`## ${endpoint.title}${target}`);
+    console.log(`> ${endpoint.stability}`);
+    console.log(endpoint.description);
+  } else {
+    console.error(`Unknown endpoint "${name}". Run "marvin api" to see all endpoints.`);
+    Deno.exit(1);
+  }
+
+  Deno.exit(0);
 }
 
 const apiHelp = `
