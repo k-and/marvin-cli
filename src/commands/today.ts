@@ -9,27 +9,36 @@ export default async function today(params: Params, cmdOpt: Options) {
     Deno.exit(0);
   }
 
-  const res = await GET("/api/todayItems", { });
+  try {
+    const res = await GET("/api/todayItems", { });
+    const items = await res.json();
 
-  const items = await res.json();
-
-  if (cmdOpt.csv) {
-    console.log(getCSVHeader());
-    for (const item of items) {
-      console.log(toCSV(item));
+    if (!Array.isArray(items)) {
+      console.error("Unexpected response format");
+      Deno.exit(1);
     }
-    Deno.exit(0);
-  }
 
-  if (cmdOpt.text) {
-    for (const item of items) {
-      console.log(item.title);
+    if (cmdOpt.csv) {
+      console.log(getCSVHeader());
+      for (const item of items) {
+        console.log(toCSV(item));
+      }
+      Deno.exit(0);
     }
-    Deno.exit(0);
-  }
 
-  console.log(items);
-  Deno.exit(0);
+    if (cmdOpt.text) {
+      for (const item of items) {
+        console.log(item.title);
+      }
+      Deno.exit(0);
+    }
+
+    console.log(JSON.stringify(items, null, 2));
+    Deno.exit(0);
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err));
+    Deno.exit(1);
+  }
 }
 
 export const todayHelp = `
