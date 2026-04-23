@@ -109,12 +109,10 @@ for (const key in cmdOpt) {
 setOptions(knownOpt);
 
 const desktopOnly = [
-  "run",
   "quickAdd",
   "list",
   "backup",
   "restore",
-  "quit",
 ];
 
 // For desktop-only commands, error out if user tries to run against public
@@ -166,16 +164,13 @@ COMMANDS:
     get      - Read an arbitrary document from your database
     today    - List Tasks and Projects that are scheduled today
     tracking - Get the currently tracked task
-    update   - Update a Task, Project, or other
-    delete   - Delete a Task, Project, or other
+    ping     - Test API connectivity
     help     - Help about any command
 
 DESKTOP COMMANDS:
-    run      - Start the desktop app
     quickAdd - Open desktop quick add
     list     - List Tasks/Projects, optionally filtered
-    backup   - Trigger backups
-    restore  - Restore backups
-    quit     - Shut down the app
+    backup   - Trigger backups (not yet implemented)
+    restore  - Restore backups (not yet implemented)
 `.trim());
 }
