@@ -129,8 +129,8 @@ if (desktopOnly.indexOf((command || "").toString()) !== -1) {
   }
 }
 
-if (command in commands) {
-  commands[command.toString()](params, knownOpt);
+if (command && command.toString() in commands) {
+  await commands[command.toString()](params, knownOpt);
 } else {
   printHelp();
   Deno.exit(1);
