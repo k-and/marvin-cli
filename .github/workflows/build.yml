@@ -29,7 +29,7 @@ jobs:
         run: ./build-all
 
       - name: Create Release Text
-        run: awk '/^# /{if(found)exit; found=1} found' CHANGELOG.md > RELEASE.md
+        run: awk '/^## \[/{if(found)exit;found=1;next} /^\[.*\]:/{if(found)exit} found' CHANGELOG.md > RELEASE.md
 
       - name: Rename binaries for release
         run: |
