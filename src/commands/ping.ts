@@ -8,10 +8,15 @@ export default async function ping(params: Params, cmdOpt: Options) {
     Deno.exit(0);
   }
 
-  const res = await GET("/api/", { });
-
-  const responseText = await res.text();
-  console.log(responseText);
+  try {
+    const res = await GET("/api/", { });
+    const responseText = await res.text();
+    console.log(responseText);
+    Deno.exit(0);
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : String(err));
+    Deno.exit(1);
+  }
 }
 
 export const pingHelp = `
