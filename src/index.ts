@@ -124,6 +124,7 @@ if (desktopOnly.indexOf((command || "").toString()) !== -1) {
   if (opt.target === "public") {
     console.error(`The command "${command}" is only available on desktop.`);
     console.error(`Try running with --desktop`);
+    Deno.exit(1);
   } else if (opt.target === "default") {
     opt.target = "desktop";
   }
