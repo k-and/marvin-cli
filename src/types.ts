@@ -46,6 +46,7 @@ export type Task = {
   timeEstimate: number,
   isStarred: number,
   isFrogged: number,
+  priority?: number,
   plannedWeek: string|null,
   plannedMonth: string|null,
   isReward: boolean,
