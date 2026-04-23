@@ -80,7 +80,7 @@ export default async function config(params: Params, cmdOpt: Options) {
   let val: string|number|boolean = params[1];
 
   if (whitelist.indexOf(key.toString()) === -1) {
-    console.error(`Unrecognizd key "${key}". Run "marvin config -h" for help.`);
+    console.error(`Unrecognised key "${key}". Run "marvin config -h" for help.`);
     Deno.exit(1);
   }
 
