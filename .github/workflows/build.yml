@@ -15,10 +15,10 @@ jobs:
     steps:
       - name: Extract version
         id: getVersion
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Deno
         uses: denoland/setup-deno@v1
@@ -29,57 +29,26 @@ jobs:
         run: ./build-all
 
       - name: Create Release Text
-        run: awk -v RS= '/a/ { print; exit }' CHANGELOG.md > RELEASE.md
+        run: awk '/^# /{if(found)exit; found=1} found' CHANGELOG.md > RELEASE.md
 
-      - name: Create a Release
-        uses: actions/create-release@v1
-        id: makeRelease
+      - name: Rename binaries for release
+        run: |
+          mv ./out/linux/marvin-cli ./out/marvin-cli-linux
+          mv ./out/macos/marvin-cli ./out/marvin-cli-macos
+          mv ./out/macos-arm/marvin-cli ./out/marvin-cli-macos-arm
+          mv ./out/windows/marvin-cli.exe ./out/marvin-cli-win.exe
+
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v2
         with:
+          name: ${{ steps.getVersion.outputs.VERSION }}
+          body_path: RELEASE.md
           draft: false
           prerelease: false
-          release_name: ${{ steps.getVersion.outputs.VERSION }}
-          tag_name: ${{ github.ref }}
-          body_path: RELEASE.md
+          files: |
+            ./out/marvin-cli-linux
+            ./out/marvin-cli-macos
+            ./out/marvin-cli-macos-arm
+            ./out/marvin-cli-win.exe
         env:
           GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Upload binary (Linux)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.makeRelease.outputs.upload_url }}
-          asset_name: marvin-cli-linux
-          asset_path: ./out/linux/marvin-cli
-          asset_content_type: application/octet-stream
-
-      - name: Upload binary (MacOS)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.makeRelease.outputs.upload_url }}
-          asset_name: marvin-cli-macos
-          asset_path: ./out/macos/marvin-cli
-          asset_content_type: application/octet-stream
-
-      - name: Upload binary (MacOS Arm)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.makeRelease.outputs.upload_url }}
-          asset_name: marvin-cli-macos-arm
-          asset_path: ./out/macos-arm/marvin-cli
-          asset_content_type: application/octet-stream
-
-      - name: Upload binary (Windows)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.makeRelease.outputs.upload_url }}
-          asset_name: marvin-cli-win.exe
-          asset_path: ./out/windows/marvin-cli.exe
-          asset_content_type: application/octet-stream
-
