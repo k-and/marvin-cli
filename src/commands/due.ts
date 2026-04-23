@@ -5,7 +5,7 @@ import { globalFormatHelp, globalOptionHelp } from "../options.ts";
 
 export default async function due(params: Params, cmdOpt: Options) {
   if (cmdOpt.help) {
-    console.log(todayHelp);
+    console.log(dueHelp);
     Deno.exit(0);
   }
 
@@ -41,7 +41,7 @@ export default async function due(params: Params, cmdOpt: Options) {
   }
 }
 
-export const todayHelp = `
+export const dueHelp = `
 marvin due
 
 List all open Tasks/Projects due today or earlier.
