@@ -1,31 +1,21 @@
-marvin-cli
+# marvin-cli
 
-A command-line tool for interfacing with the Amazing Marvin desktop app and public API.
+A command-line tool for interfacing with the Amazing Marvin desktop app and public API. This is a fork of [amazingmarvin/marvin-cli](https://github.com/amazingmarvin/marvin-cli) v0.5.1 with bug fixes across the async command dispatch path, config validation, CI tooling, the Windows storage path and several command stubs.
 
-# Word of Warning
+marvin-cli connects to either the public API at `serv.amazingmarvin.com` or, if you disable cloud sync and run the desktop app, the desktop's [local API server](https://help.amazingmarvin.com/en/articles/5165191-desktop-local-api-server). It selects automatically based on connectivity; `--desktop` and `--public` pin the choice explicitly.
 
-This is a work-in-progress. Not all documented features are working and/or
-working as expected. PRs welcome!
+## Install
 
-# Background
+Download a prebuilt binary for your platform from the [releases page](https://github.com/k-and/marvin-cli/releases):
 
-While you can use Marvin's public API to create tasks, scripting is a bit
-easier with a command-line tool so that you can:
+- Linux: `marvin-cli-linux`
+- macOS (x86_64): `marvin-cli-macos`
+- macOS (arm64): `marvin-cli-macos-arm`
+- Windows: `marvin-cli-win.exe`
 
-```bash
-marvin add task "Example +today"
-```
+Rename the binary to `marvin` (or `marvin.exe` on Windows) and copy it to a directory in your `PATH`. The CLI is invoked as `marvin`, which is what every example in this README and the `--help` output assumes. To build yourself instead, see [Build From Source](#build-from-source).
 
-But even more importantly, until now scripting wasn't possible for desktop
-users who disable cloud sync. As of 1.60.0 you can run a
-[local API server](https://help.amazingmarvin.com/en/articles/5165191-desktop-local-api-server)
-which serves a subset of the public API, plus some bonus commands that only
-work on desktop.
-
-So marvin-cli can either communicate with the public API or a desktop app
-instance.
-
-# Commands
+## Commands
 
 ```
 COMMANDS:
@@ -46,17 +36,31 @@ DESKTOP COMMANDS:
     restore  - Restore backups (not yet implemented)
 ```
 
-# Installation
+Run `marvin COMMAND --help` for command-specific options.
 
-Download a release for your platform [here](https://github.com/amazingmarvin/marvin-cli/releases).
+## Configure
 
-# Building
+Get your API token from [app.amazingmarvin.com/pre?api](https://app.amazingmarvin.com/pre?api) (or from the API strategy settings in the desktop app) and save it once:
 
-* Install deno
-* Clone repository
-* Run `./build` (or `BUILD.bat` on windows)
-* Copy `marvin-cli` (or `marvin-cli.exe` on windows) to your path
+```bash
+marvin config apiToken YOUR_TOKEN
+```
 
-# Configuring
+Some endpoints – `get` and anything that writes via `/api/doc/*` – also need a full-access token, found next to the API token in the desktop app settings:
 
-Get your API Token from https://app.amazingmarvin.com/pre?api (or find it in the API strategy settings) then run `marvin config apiToken XYZ` or use the `--api-token` command line option.
+```bash
+marvin config fullAccessToken YOUR_FULL_ACCESS_TOKEN
+```
+
+Pass `--api-token` or `--full-access-token` on the command line to override the stored values for a single invocation. `marvin config` with no arguments prints your current settings with tokens masked; pass `--with-secrets` to reveal them.
+
+## Build From Source
+
+Prebuilt binaries cover most cases. Build from source if you want to hack on marvin-cli or target a platform the release doesn't ship.
+
+1. Install [Deno](https://deno.land) (v2.x or newer)
+2. Clone the repo
+3. Run `./build` (or `BUILD.bat` on Windows)
+4. Rename the resulting `marvin-cli` (or `marvin-cli.exe`) to `marvin` (or `marvin.exe`) and copy it to your `PATH`
+
+Run `./build-all` to produce binaries for all four supported platforms in `out/`.
