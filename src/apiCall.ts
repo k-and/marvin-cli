@@ -85,7 +85,7 @@ export async function GET(endpoint: string, headers: Record<string, string>) {
   return apiCall(endpoint, headers, { method: "GET" });
 }
 
-export function POST(endpoint: string, body: string, headers: Record<string, string>) {
+export async function POST(endpoint: string, body: string, headers: Record<string, string>) {
   return apiCall(endpoint, headers, { method: "POST", body });
 }
 
