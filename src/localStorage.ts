@@ -96,6 +96,10 @@ export function removeItem(key: string): void {
 }
 
 export function clear(): void {
-  cache = { };
-  Deno.writeTextFileSync(storagePath, "{}");
+  try {
+    cache = { };
+    Deno.writeTextFileSync(storagePath, "{}");
+  } catch (err) {
+    console.error("Failed to clear storage:", err instanceof Error ? err.message : String(err));
+  }
 }
