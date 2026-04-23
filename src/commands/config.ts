@@ -42,8 +42,8 @@ export default async function config(params: Params, cmdOpt: Options) {
     }
 
     if (!cmdOpt["with-secrets"]) {
-      apiToken = apiToken.replace(/.{20}$/, "...");
-      fullAccessToken = fullAccessToken.replace(/.{20}$/, "...");
+      apiToken = apiToken.length > 4 ? apiToken.substring(0, 4) + "..." : (apiToken ? "***" : "");
+      fullAccessToken = fullAccessToken.length > 4 ? fullAccessToken.substring(0, 4) + "..." : (fullAccessToken ? "***" : "");
     }
 
     if (cmdOpt.json) {
