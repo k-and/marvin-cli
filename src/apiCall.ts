@@ -20,15 +20,7 @@ async function apiCall(endpoint: string, headers: Record<string, string>, extraO
     }
   } else {
     tokenName = "X-API-Token";
-    if (opt.apiToken) {
-      token = opt.apiToken;
-    } else {
-      throw new Error("API token needed. Use `marvin config apiToken YOUR_TOKEN`.");
-    }
-  }
-
-  if (!token) {
-    throw new Error("Missing token");
+    token = opt.apiToken;
   }
 
   // First try desktop
