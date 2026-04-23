@@ -140,8 +140,8 @@ function printHelp() {
 marvin-cli
 CLI access to Amazing Marvin
 
-Docs: https://github.com/amazingmarvin/marvin-cli
-Bugs: https://github.com/amazingmarvin/marvin-cli/issues
+Docs: https://github.com/k-and/marvin-cli
+Bugs: https://github.com/k-and/marvin-cli/issues
 
 USAGE:
     marvin [OPTIONS] [SUBCOMMAND]
