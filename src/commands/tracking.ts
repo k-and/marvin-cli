@@ -6,7 +6,7 @@ import { Params, Options } from "../types.ts";
 // Get the currently tracked item
 export default async function tracking(params: Params, cmdOpt: Options) {
   if (cmdOpt.help) {
-    console.log(getHelp);
+    console.log(trackingHelp);
     Deno.exit(0);
   }
 
@@ -22,17 +22,17 @@ export default async function tracking(params: Params, cmdOpt: Options) {
     Deno.exit(0);
   }
 
-  console.error(getHelp);
+  console.error(trackingHelp);
   Deno.exit(1);
 }
 
-export const getHelp = `
+export const trackingHelp = `
 marvin tracking
 
 Get the currently tracked item.
 
 EXAMPLE:
-    # Get a Task/Project/Event/etc. by ID
+    # Get the currently tracked task
     $ marvin tracking
 
 OPTIONS:
