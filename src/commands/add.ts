@@ -35,7 +35,9 @@ export default async function add(params: Params, cmdOpt: Options) {
           if (item.db === "Categories") {
             endpoint = "/api/addProject";
           }
-        } catch (err) { } // eslint-disable-line
+        } catch (_err) {
+          // File starts with { but isn't valid JSON - treat as plain text
+        }
       }
 
       const res = await POST(endpoint, text, { "Content-Type": contentType });
