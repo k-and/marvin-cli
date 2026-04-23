@@ -39,13 +39,17 @@ export const globalFormatHelp = `
 `.trimEnd();
 
 function getSavedVal(key: string):number|string|boolean|null {
-  const val = localStorage.getItem(key) || null;
+  const val = localStorage.getItem(key);
   if (!val) {
-    return val;
+    return null;
   }
-  const parsedVal = JSON.parse(val);
-  if (typeof parsedVal === "number" || typeof parsedVal === "string" || typeof parsedVal === "boolean") {
-    return parsedVal;
+  try {
+    const parsedVal = JSON.parse(val);
+    if (typeof parsedVal === "number" || typeof parsedVal === "string" || typeof parsedVal === "boolean") {
+      return parsedVal;
+    }
+  } catch {
+    // Corrupted value in storage - ignore and return null
   }
   return null;
 }
