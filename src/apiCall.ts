@@ -8,7 +8,7 @@ async function apiCall(endpoint: string, headers: Record<string, string>, extraO
     Deno.exit(1);
   }
 
-  let errorMessage;
+  let errorMessage = "Connection failed";
 
   let tokenName: string, token: string;
   if (needsFullAccess(endpoint)) {
@@ -54,7 +54,7 @@ async function apiCall(endpoint: string, headers: Record<string, string>, extraO
         errorMessage += res.statusText;
       }
     } catch (err) {
-      errorMessage = err.message;
+      errorMessage = err instanceof Error ? err.message : String(err);
     }
   }
 
@@ -82,7 +82,7 @@ async function apiCall(endpoint: string, headers: Record<string, string>, extraO
         errorMessage += res.statusText;
       }
     } catch (err) {
-      errorMessage = err.message;
+      errorMessage = err instanceof Error ? err.message : String(err);
     }
   }
 

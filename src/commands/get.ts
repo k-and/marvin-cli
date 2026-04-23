@@ -24,7 +24,7 @@ export default async function get(params: Params, cmdOpt: Options) {
       await printResult(res);
       Deno.exit(0);
     } catch (err) {
-      console.error(err.message);
+      console.error(err instanceof Error ? err.message : String(err));
       Deno.exit(1);
     }
   }

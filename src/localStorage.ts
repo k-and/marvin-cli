@@ -59,7 +59,7 @@ if (existsSync(storagePath)) {
     cache = JSON.parse(json);
   } catch (err) {
     cache = { };
-    console.error("Failed to read/parse storage:", err.message);
+    console.error("Failed to read/parse storage:", err instanceof Error ? err.message : String(err));
   }
 } else {
   console.log("Creating cache");
@@ -82,7 +82,7 @@ export function setItem(key: string, val: string): void {
     const newJson = JSON.stringify(cache, null, 2);
     Deno.writeTextFileSync(storagePath, newJson);
   } catch (err) {
-    console.error("Failed to write local storage:", err.message);
+    console.error("Failed to write local storage:", err instanceof Error ? err.message : String(err));
   }
 }
 
@@ -92,7 +92,7 @@ export function removeItem(key: string): void {
     const newJson = JSON.stringify(cache, null, 2);
     Deno.writeTextFileSync(storagePath, newJson);
   } catch (err) {
-    console.error("Failed to read/write local storage:", err.message);
+    console.error("Failed to read/write local storage:", err instanceof Error ? err.message : String(err));
   }
 }
 

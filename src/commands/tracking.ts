@@ -16,7 +16,7 @@ export default async function tracking(params: Params, cmdOpt: Options) {
       const res = await GET("/api/trackedItem", { });
       await printResult(res);
     } catch (err) {
-      console.error(err.message);
+      console.error(err instanceof Error ? err.message : String(err));
       Deno.exit(1);
     }
     Deno.exit(0);
