@@ -4,10 +4,5 @@
 * Implement reading from stdin in commands/add
 * Decide API for update command
 * Decide API for delete command
-* Finish help command
-* Implement run command
-* Implement quickAdd command
 * Implement backup command
 * Implement restore command
-* Implement quit command
-* Go through help text

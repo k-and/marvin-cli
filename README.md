@@ -36,17 +36,14 @@ COMMANDS:
     get      - Read an arbitrary document from your database
     today    - List Tasks and Projects that are scheduled today
     tracking - Get the currently tracked task
-    update   - Update a Task, Project, or other (not yet implemented)
-    delete   - Delete a Task, Project, or other (not yet implemented)
+    ping     - Test API connectivity
     help     - Help about any command
 
 DESKTOP COMMANDS:
-    run      - Start the desktop app (not yet implemented)
     quickAdd - Open desktop quick add
     list     - List Tasks/Projects, optionally filtered
     backup   - Trigger backups (not yet implemented)
     restore  - Restore backups (not yet implemented)
-    quit     - Shut down the app (not yet implemented)
 ```
 
 # Installation
