@@ -5,21 +5,12 @@ export function getCSVHeader(): string {
 }
 
 function csvEscape(str: number|string): string {
-  if (typeof str === "number") {
-    str = str.toString();
+  const s = String(str);
+  if (s.includes(",") || s.includes('"') || s.includes("\n")) {
+    return `"${s.replace(/"/g, '""')}"`;
   }
-
-  if (typeof str !== "string") {
-    str = "";
-  }
-
-  if (str.indexOf(",") !== -1 || str.indexOf("\"") !== -1 || str.indexOf("\n") !== -1) {
-    str = str.replace(/"/g, "\"\"");
-    return `"${str}"`;
-  }
-
-  return str;
-};
+  return s;
+}
 
 function getDate(d: string) {
   if (d === "unassigned") {
