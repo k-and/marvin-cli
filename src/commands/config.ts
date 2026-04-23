@@ -1,4 +1,3 @@
-import { existsSync, path } from "../deps.ts";
 import { getOptions } from "../options.ts";
 import * as localStorage from "../localStorage.ts";
 import { Params, Options } from "../types.ts";
@@ -16,7 +15,6 @@ const whitelist = [
 
 // Set a config value or view current config.
 export default async function config(params: Params, cmdOpt: Options) {
-  let currentConfig = { };
   const options = getOptions();
 
   if (cmdOpt.help) {
