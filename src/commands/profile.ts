@@ -28,7 +28,7 @@ export const profileHelp = `
 marvin profile
 
 Get profile information. For documentation about the result, see:
-https://github.com/amazingmarvin/MarvinAPI/wiki/Marvin-Data-Types#profile for
+https://github.com/amazingmarvin/MarvinAPI/wiki/Marvin-Data-Types#profile
 
 EXAMPLE:
     $ marvin profile
@@ -50,7 +50,7 @@ EXAMPLE:
       tomatoes: 184,
       tomatoesToday: 3,
       tomatoTime: 102844000,
-      tomatoTimeTOday: 142000,
+      tomatoTimeToday: 142000,
       tomatoDate: "2021-04-10",
       defaultSnooze: 0,
       defaultAutoSnooze: false,
