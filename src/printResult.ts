@@ -8,7 +8,7 @@ export async function printResult(res: Response): Promise<void> {
       if (options.json) {
         console.log(JSON.stringify(json));
       } else {
-        console.log(json);
+        console.log(JSON.stringify(json, null, 2));
       }
     } else {
       const text = await res.text();
