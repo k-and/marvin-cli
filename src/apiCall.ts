@@ -78,8 +78,7 @@ async function apiCall(endpoint: string, headers: Record<string, string>, extraO
     }
   }
 
-  const error = new Error(errorMessage.trim());
-  return Promise.reject(error);
+  throw new Error(errorMessage.trim());
 }
 
 export async function GET(endpoint: string, headers: Record<string, string>) {
