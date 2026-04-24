@@ -98,8 +98,10 @@ const {
 
 const knownOpt: Options = { };
 for (const key in cmdOpt) {
-  const val: string|boolean|number|unknown = cmdOpt[key];
+  const val: unknown = cmdOpt[key];
   if (typeof val === "string" || typeof val === "boolean" || typeof val === "number") {
+    knownOpt[key] = val;
+  } else if (Array.isArray(val) && val.every((v) => typeof v === "string")) {
     knownOpt[key] = val;
   } else {
     console.log("Ignoring unknown option", key);

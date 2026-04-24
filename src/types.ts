@@ -1,12 +1,14 @@
-// Command line args (other than flags/options).
+// Command line args (other than flags/options)
 export type Params = (string | number)[];
 
 // Raw options as they come in from command line, once we have filtered out any
-// items with type "unknown".
-export type Options = Record<string, string|boolean|number>;
+// items with type "unknown"
+// String arrays are preserved for collect-mode flags like --set and --set-json
+// which may be repeated
+export type Options = Record<string, string|boolean|number|string[]>;
 
 // Final options: populated by config file, and then possibly overwritten by
-// command line options.
+// command line options
 export type ResolvedOptions = {
   port: number,
   host: string,
