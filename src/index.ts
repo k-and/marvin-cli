@@ -169,6 +169,8 @@ COMMANDS:
     api      - View API docs
     config   - Get/set config values for marvin-cli
     add      - Add a Task, Project, or other
+    update   - Update a Task, Project, or other
+    delete   - Delete a Task, Project, or other
     due      - Get open Tasks & Projects due today (or earlier)
     get      - Read an arbitrary document from your database
     today    - List Tasks and Projects that are scheduled today
