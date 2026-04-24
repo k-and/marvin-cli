@@ -22,6 +22,7 @@ COMMANDS:
     api      - View API docs
     config   - Get/set config values for marvin-cli
     add      - Add a Task, Project, or other
+    create   - Create a document from a JSON file
     update   - Update a Task, Project, or other
     delete   - Delete a Task, Project, or other
     batch    - Apply a list of mutations from a JSON file
