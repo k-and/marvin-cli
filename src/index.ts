@@ -6,6 +6,7 @@ import add from "./commands/add.ts";
 import api from "./commands/api.ts";
 import backup from "./commands/backup.ts";
 import config from "./commands/config.ts";
+import deleteCmd from "./commands/delete.ts";
 import due from "./commands/due.ts";
 import get from "./commands/get.ts";
 import help from "./commands/help.ts";
@@ -25,6 +26,7 @@ const commands: Record<string, (params: Params, options: Options) => Promise<voi
   api,
   backup,
   config,
+  delete: deleteCmd,
   due,
   get,
   help,
