@@ -173,6 +173,7 @@ COMMANDS:
     add      - Add a Task, Project, or other
     update   - Update a Task, Project, or other
     delete   - Delete a Task, Project, or other
+    batch    - Apply a list of mutations from a JSON file
     due      - Get open Tasks & Projects due today (or earlier)
     get      - Read an arbitrary document from your database
     today    - List Tasks and Projects that are scheduled today
