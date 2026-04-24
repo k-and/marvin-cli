@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0] - 2026-04-24
+
+Adds `op: "create"` to `marvin batch`. Mixed create, update and delete plans now run inside one validated, rate-limited pass. Motivated by a dogfood run of the weekly time-block rebuild, which showed that shelling out to `marvin create` per item loses batch-level dry-run, eager validation and adds process-spawn overhead.
+
+### Added
+
+- `op: "create"` in batch plans, mapped to `POST /api/doc/create`
+- Mixed create, update and delete in a single plan, executed in the order given
+- Create payload validation matches `marvin create`: payload must be a JSON object, field shape left to the server
+
+### Notes
+
+- Cross-item ID references are not supported. Callers that need to reference a created document in a later item of the same plan pre-generate the `_id` client-side (`crypto.randomUUID()` suffices) and reuse it
+
 ## [1.4.0] - 2026-04-24
 
 Adds `marvin create`, completing the single-item CRUD surface. The CLI now has `add`, `create`, `update`, `delete` for single-item writes, `batch` for bulk ordered writes, and `get` for reads – a stable base that downstream tooling (including future AI layers) can target.
@@ -87,6 +101,7 @@ Fork of [`amazingmarvin/marvin-cli`](https://github.com/amazingmarvin/marvin-cli
 - `ping` and `quickAdd` wrap bodies in try/catch
 - `add` silent JSON-parse fallback annotated with `_err` and an explanatory comment
 
+[1.5.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.5.0
 [1.4.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.4.0
 [1.3.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.3.0
 [1.2.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.2.0
