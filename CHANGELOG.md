@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.0] - 2026-04-24
+
+Adds `marvin batch`, a JSON runner for bulk `update` and `delete` operations. Sequential, rate-limited to one request per second, continue-on-error. Intended both as a standalone bulk-mutation tool and as a stable execution surface for planners and future AI tooling to target.
+
+### Added
+
+- `marvin batch --file=<path>` applies a flat JSON array of `{"op": "update"|"delete", "payload": {...}}` items against `/api/doc/update` and `/api/doc/delete`. Supports `--file=-` for stdin and `--dry-run` for preview
+- `--dry-run` on `batch` prints each item's endpoint, redacted headers and pretty-printed payload, then exits 0 without contacting the API or checking for a fullAccessToken
+- Validation rejects unknown top-level item keys (so typos like `"paylod"` fail fast), unsupported ops, empty itemIds, empty setter arrays and empty setter keys before any request is sent
+
 ## [1.2.0] - 2026-04-24
 
 `marvin add` now reads from stdin, so shell pipelines like `cat task.json | marvin add --file=-` work natively.
@@ -63,6 +73,7 @@ Fork of [`amazingmarvin/marvin-cli`](https://github.com/amazingmarvin/marvin-cli
 - `ping` and `quickAdd` wrap bodies in try/catch
 - `add` silent JSON-parse fallback annotated with `_err` and an explanatory comment
 
+[1.3.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.3.0
 [1.2.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.2.0
 [1.1.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.1.0
 [1.0.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.0.0
