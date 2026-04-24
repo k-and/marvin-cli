@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.0] - 2026-04-24
+
+Adds `marvin create`, completing the single-item CRUD surface. The CLI now has `add`, `create`, `update`, `delete` for single-item writes, `batch` for bulk ordered writes, and `get` for reads – a stable base that downstream tooling (including future AI layers) can target.
+
+### Added
+
+- `marvin create --file=<path>` creates a document via `POST /api/doc/create`. Unlike `add`, which wraps the title-parsing `/api/addTask` and `/api/addProject` endpoints, `create` sends the JSON body verbatim and can create any document type (Task, Project, Label, Category, PlannerItem, Reward, etc). Supports `--file=-` for stdin and `--dry-run` for preview
+- Input is validated as a single JSON object (arrays and scalars are rejected); field-level shape is left to the server so the command stays decoupled from schema evolution
+- Response is printed through the normal output path, so the created document's assigned `_id` is available for downstream scripting and `--json` / `--quiet` behave consistently with the other commands
+
+### Removed
+
+- Inherited upstream `TODO.md` (last remaining item, the create command, is now implemented)
+
 ## [1.3.0] - 2026-04-24
 
 Adds `marvin batch`, a JSON runner for bulk `update` and `delete` operations. Sequential, rate-limited to one request per second, continue-on-error. Intended both as a standalone bulk-mutation tool and as a stable execution surface for planners and future AI tooling to target.
@@ -73,6 +87,7 @@ Fork of [`amazingmarvin/marvin-cli`](https://github.com/amazingmarvin/marvin-cli
 - `ping` and `quickAdd` wrap bodies in try/catch
 - `add` silent JSON-parse fallback annotated with `_err` and an explanatory comment
 
+[1.4.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.4.0
 [1.3.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.3.0
 [1.2.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.2.0
 [1.1.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.1.0
