@@ -4,16 +4,19 @@ import { readFileOrStdin } from "../stdio.ts";
 import { Params, Options } from "../types.ts";
 
 type Setter = { key: string; val: unknown };
+type CreatePayload = Record<string, unknown>;
 type UpdatePayload = { itemId: string; setters: Setter[] };
 type DeletePayload = { itemId: string };
 
 type BatchItem =
+  | { op: "create"; payload: CreatePayload }
   | { op: "update"; payload: UpdatePayload }
   | { op: "delete"; payload: DeletePayload };
 
 const ALLOWED_ITEM_KEYS = new Set(["op", "payload"]);
-const ALLOWED_OPS = new Set(["update", "delete"]);
-const OP_TO_ENDPOINT: Record<"update" | "delete", string> = {
+const ALLOWED_OPS = new Set(["create", "update", "delete"]);
+const OP_TO_ENDPOINT: Record<"create" | "update" | "delete", string> = {
+  create: "/api/doc/create",
   update: "/api/doc/update",
   delete: "/api/doc/delete",
 };
@@ -40,12 +43,16 @@ function validateItem(raw: unknown, i: number): BatchItem {
     throw new Error(`${prefix} missing or non-string "op"`);
   }
   if (!ALLOWED_OPS.has(obj.op)) {
-    throw new Error(`${prefix} unsupported op "${obj.op}". Allowed: update, delete`);
+    throw new Error(`${prefix} unsupported op "${obj.op}". Allowed: create, update, delete`);
   }
   if (obj.payload === null || typeof obj.payload !== "object" || Array.isArray(obj.payload)) {
     throw new Error(`${prefix} missing or non-object "payload"`);
   }
   const payload = obj.payload as Record<string, unknown>;
+
+  if (obj.op === "create") {
+    return { op: "create", payload };
+  }
 
   if (obj.op === "update") {
     if (typeof payload.itemId !== "string" || payload.itemId === "") {
@@ -80,6 +87,17 @@ function validateItem(raw: unknown, i: number): BatchItem {
     op: "delete",
     payload: { itemId: payload.itemId },
   };
+}
+
+function itemLabel(item: BatchItem): string {
+  if (item.op === "create") {
+    const id = item.payload._id;
+    const title = item.payload.title;
+    if (typeof id === "string" && id !== "") return id;
+    if (typeof title === "string" && title !== "") return title;
+    return "<no id>";
+  }
+  return item.payload.itemId;
 }
 
 function printDryRunItem(i: number, total: number, item: BatchItem) {
@@ -144,7 +162,7 @@ export default async function batch(params: Params, cmdOpt: Options) {
 
   for (let i = 0; i < total; i++) {
     const item = items[i];
-    const itemId = item.payload.itemId;
+    const label = itemLabel(item);
 
     const now = Date.now();
     const wait = lastStart + RATE_LIMIT_MS - now;
@@ -158,12 +176,12 @@ export default async function batch(params: Params, cmdOpt: Options) {
       await POST(endpoint, JSON.stringify(item.payload), { "Content-Type": "application/json" });
       succeeded++;
       if (!cmdOpt.quiet) {
-        console.log(`[${i + 1}/${total}] OK   ${item.op} ${itemId}`);
+        console.log(`[${i + 1}/${total}] OK   ${item.op} ${label}`);
       }
     } catch (err) {
       failed++;
       const msg = err instanceof Error ? err.message : String(err);
-      console.error(`[${i + 1}/${total}] FAIL ${item.op} ${itemId} - ${msg}`);
+      console.error(`[${i + 1}/${total}] FAIL ${item.op} ${label} - ${msg}`);
     }
   }
 
@@ -178,9 +196,15 @@ Apply a list of mutations from a JSON file. Reads a flat JSON
 array of {"op", "payload"} objects and executes each in order,
 rate-limited to one request per second.
 
-Supported ops (v1.3):
+Supported ops:
+- create (issues POST /api/doc/create)
 - update (issues POST /api/doc/update)
 - delete (issues POST /api/doc/delete)
+
+Ops may be mixed in a single plan and are executed in the order
+given. For create, pre-generate the document's "_id" client-side if
+you want to reference it in a later update or delete within the
+same plan.
 
 Requires the fullAccessToken for live requests. --dry-run skips the
 token check and never contacts the API.
@@ -198,13 +222,20 @@ EXAMPLE:
     # Preview the requests without sending
     $ marvin batch --file=ops.json --dry-run
 
-Example ops.json:
+Example ops.json (mixed create, update, delete):
     [
+      {
+        "op": "create",
+        "payload": {
+          "db": "Tasks",
+          "title": "New task from batch"
+        }
+      },
       {
         "op": "update",
         "payload": {
           "itemId": "AJNBWKLrTqYPKaWgfx92",
-          "setters": [{"key": "title", "val": "New title"}]
+          "setters": [{"key": "title", "val": "Renamed"}]
         }
       },
       {
