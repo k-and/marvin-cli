@@ -16,6 +16,7 @@ import quickAdd from "./commands/quickAdd.ts";
 import restore from "./commands/restore.ts";
 import today from "./commands/today.ts";
 import tracking from "./commands/tracking.ts";
+import update from "./commands/update.ts";
 
 const VERSION = "1.0.0";
 
@@ -34,6 +35,7 @@ const commands: Record<string, (params: Params, options: Options) => Promise<voi
   restore,
   today,
   tracking,
+  update,
 };
 
 const cmdArgs = parse(Deno.args, {
@@ -53,9 +55,10 @@ const cmdArgs = parse(Deno.args, {
     "json", // JSON output
     "with-secrets",
     "csv", // CSV output
-    "text", // text output
+    "text", // Text output
     "version",
     "done", // List completed tasks
+    "dry-run", // Preview the payload without sending (update, delete)
   ],
   string: [
     "file",
@@ -63,7 +66,10 @@ const cmdArgs = parse(Deno.args, {
     "full-access-token",
     "output",
     "filter", // Supply an advanced filter
+    "set", // Repeatable: update setter as key=value
+    "set-json", // Repeatable: update setter as key=JSON
   ],
+  collect: ["set", "set-json"],
 });
 
 if (cmdArgs.version) {
@@ -71,7 +77,7 @@ if (cmdArgs.version) {
   Deno.exit(0);
 }
 
-// Print simple help if run without command.
+// Print simple help if run without command
 if (cmdArgs._.length === 0 && cmdArgs.help) {
   printHelp();
   Deno.exit(0);
@@ -117,8 +123,7 @@ const desktopOnly = [
   "restore",
 ];
 
-// For desktop-only commands, error out if user tries to run against public
-// API.
+// For desktop-only commands, error out if user tries to run against public API
 if (desktopOnly.indexOf((command || "").toString()) !== -1) {
   const opt = getOptions();
   if (opt.target === "public") {
