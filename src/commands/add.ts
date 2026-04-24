@@ -1,6 +1,7 @@
 import { POST } from "../apiCall.ts";
 import { globalOptionHelp } from "../options.ts";
 import { printResult } from "../printResult.ts";
+import { readFileOrStdin } from "../stdio.ts";
 import { Params, Options } from "../types.ts";
 
 // Add a task or project.
@@ -10,20 +11,12 @@ export default async function add(params: Params, cmdOpt: Options) {
     Deno.exit(0);
   }
 
-  // echo "example" | marvin add --file=-
-  if (params.length === 0 && cmdOpt.file === "-") {
-    // Read stdin
-    console.log("Not yet implemented");
-    Deno.exit(1);
-  }
-
-  // marvin add --file=task.json
+  // marvin add --file=<path>  (use --file=- for stdin)
   if (params.length === 0 && cmdOpt.file) {
-    // Read file
     try {
-      const text = Deno.readTextFileSync(cmdOpt.file.toString());
+      const text = await readFileOrStdin(cmdOpt.file.toString());
       if (!text) {
-        throw new Error("File was empty");
+        throw new Error("Input was empty");
       }
 
       let contentType = "text/plain", endpoint = "/api/addTask";
@@ -107,11 +100,13 @@ EXAMPLE:
     # Add an arbitrary item (by supplying JSON).
     $ marvin add --file=./task.json
 
-    # Pipe JSON to stdin to create project
-    $ cat project.json | marvin add -f -
+    # Pipe JSON to stdin to create a project
+    $ cat project.json | marvin add --file=-
 
 OPTIONS:
     -f, --file=<path>
-        Read JSON/text from file. Use - for stdin.
+        Read JSON/text from file. Use --file=- for stdin. The equals
+        sign is required for the stdin form because Deno's flag
+        parser treats a bare - as a positional.
 ${globalOptionHelp}
 `.trim();
