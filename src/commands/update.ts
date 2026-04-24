@@ -1,6 +1,7 @@
 import { POST } from "../apiCall.ts";
 import { globalOptionHelp } from "../options.ts";
 import { printResult } from "../printResult.ts";
+import { readFileOrStdin } from "../stdio.ts";
 import { Params, Options } from "../types.ts";
 
 type Setter = { key: string; val: unknown };
@@ -30,26 +31,6 @@ function normaliseToArray(val: unknown): string[] {
   if (Array.isArray(val)) return val.map(String);
   if (typeof val === "string") return [val];
   return [];
-}
-
-async function readFileOrStdin(path: string): Promise<string> {
-  if (path === "-") {
-    const chunks: Uint8Array[] = [];
-    const buf = new Uint8Array(4096);
-    let n: number | null;
-    while ((n = await Deno.stdin.read(buf)) !== null) {
-      chunks.push(buf.slice(0, n));
-    }
-    const total = chunks.reduce((acc, c) => acc + c.length, 0);
-    const merged = new Uint8Array(total);
-    let pos = 0;
-    for (const c of chunks) {
-      merged.set(c, pos);
-      pos += c.length;
-    }
-    return new TextDecoder().decode(merged);
-  }
-  return Deno.readTextFileSync(path);
 }
 
 function printDryRun(endpoint: string, payload: unknown) {
