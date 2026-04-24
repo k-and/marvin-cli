@@ -19,7 +19,7 @@ import today from "./commands/today.ts";
 import tracking from "./commands/tracking.ts";
 import update from "./commands/update.ts";
 
-const VERSION = "1.0.0";
+const VERSION = "1.1.0";
 
 const commands: Record<string, (params: Params, options: Options) => Promise<void>> = {
   add,

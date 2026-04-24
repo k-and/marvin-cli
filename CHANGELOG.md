@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.0] - 2026-04-24
+
+Adds the two missing CRUD primitives from the upstream TODO: `update` and `delete`. Both support a `--dry-run` flag that previews the request payload without contacting the API.
+
+### Added
+
+- `marvin update ITEM_ID` edits a document via `POST /api/doc/update`; accepts `--set key=value` (string), `--set-json key=JSON` (typed), or `--file=<path>` / `--file=-` (JSON array of setter objects). Sources are additive; later entries override earlier ones for the same key
+- `marvin delete ITEM_ID` removes a document via `POST /api/doc/delete`. Requires `--force` for live deletes (irreversible)
+- `--dry-run` flag on both `update` and `delete` prints the endpoint, redacted headers and pretty-printed JSON payload, then exits 0 without contacting the API or checking for a fullAccessToken
+
 ## [1.0.0] - 2026-04-23
 
 Fork of [`amazingmarvin/marvin-cli`](https://github.com/amazingmarvin/marvin-cli) v0.5.1. Bug-fix pass across async command dispatch, error handling, config validation, CI release tooling and the Windows storage path, plus a small number of quality-of-life improvements.
@@ -45,4 +55,5 @@ Fork of [`amazingmarvin/marvin-cli`](https://github.com/amazingmarvin/marvin-cli
 - `ping` and `quickAdd` wrap bodies in try/catch
 - `add` silent JSON-parse fallback annotated with `_err` and an explanatory comment
 
+[1.1.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.1.0
 [1.0.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.0.0
