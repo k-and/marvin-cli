@@ -5,6 +5,7 @@ import { Params, Options } from "./types.ts";
 import add from "./commands/add.ts";
 import api from "./commands/api.ts";
 import backup from "./commands/backup.ts";
+import batch from "./commands/batch.ts";
 import config from "./commands/config.ts";
 import deleteCmd from "./commands/delete.ts";
 import due from "./commands/due.ts";
@@ -25,6 +26,7 @@ const commands: Record<string, (params: Params, options: Options) => Promise<voi
   add,
   api,
   backup,
+  batch,
   config,
   delete: deleteCmd,
   due,
