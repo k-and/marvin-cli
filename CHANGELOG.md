@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0] - 2026-04-24
+
+`marvin add` now reads from stdin, so shell pipelines like `cat task.json | marvin add --file=-` work natively.
+
+### Added
+
+- `marvin add --file=-` reads the task payload (JSON or plain text) from stdin
+
 ## [1.1.0] - 2026-04-24
 
 Adds the two missing CRUD primitives from the upstream TODO: `update` and `delete`. Both support a `--dry-run` flag that previews the request payload without contacting the API.
@@ -55,5 +63,6 @@ Fork of [`amazingmarvin/marvin-cli`](https://github.com/amazingmarvin/marvin-cli
 - `ping` and `quickAdd` wrap bodies in try/catch
 - `add` silent JSON-parse fallback annotated with `_err` and an explanatory comment
 
+[1.2.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.2.0
 [1.1.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.1.0
 [1.0.0]: https://github.com/k-and/marvin-cli/releases/tag/v1.0.0
